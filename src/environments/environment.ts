@@ -3,7 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    firebase: {
+        apiKey: "AIzaSyC6KqtZ1MGPxcHFrVYmqlIANU589g9x2xw",
+        authDomain: "chrome-extension-noninertial.firebaseapp.com",
+        databaseURL: "https://chrome-extension-noninertial-default-rtdb.firebaseio.com",
+        projectId: "chrome-extension-noninertial",
+        storageBucket: "chrome-extension-noninertial.appspot.com",
+        messagingSenderId: "908579202364",
+        appId: "1:908579202364:web:446c01b1e3e347d0562a39",
+        measurementId: "G-48RJPR3D4L"
+    }
 };
 
 /*

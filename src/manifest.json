@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "PageChat",
+    "version": "1.0.0",
+    "permissions": [ "tabs", "activeTab" ],
+    "description": "Build an Extension!",
+    "background": {
+      "page": "index.html#/event-page"
+    },
+    "browser_action": {
+      "default_title": "Open Popup!",
+      "default_popup": "index.html#/popup"
+    },
+    "content_security_policy": "script-src 'self' https://apis.google.com https://www.gstatic.com https://www.googleapis.com https://securetoken.googleapis.com; object-src 'self'"
+  }
