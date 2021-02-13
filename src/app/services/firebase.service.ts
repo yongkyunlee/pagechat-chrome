@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+import firebase from 'firebase/app';
+
 @Injectable({
     providedIn: 'root'
 })
 export class FirebaseService {
+    public counter = 0;
+    constructor(
+        public db: AngularFirestore
+    ) {  }
 
-    constructor(public db: AngularFirestore) {}
-
+    incrementCounter() {
+        this.counter++;
+    }
     // getTabId(name){
     //     var tabId = name.toLowerCase();
     //     tabId = tabId.replace(" ","_");
