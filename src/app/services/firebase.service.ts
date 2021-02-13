@@ -10,7 +10,7 @@ export class FirebaseService {
     public counter = 0;
     constructor(
         public db: AngularFirestore
-    ) {  }
+    ) { }
 
     incrementCounter() {
         this.counter++;

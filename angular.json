@@ -18,8 +18,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+                "path": "./custom-webpack.config.js"
+            },
             "outputPath": "dist/pagechat-chrome",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -37,6 +40,11 @@
             "scripts": []
           },
           "configurations": {
+            "dev": {
+                "customWebpackConfig": {
+                  "path": "./custom-webpack-dev.config.js"
+                }
+            },
             "production": {
               "fileReplacements": [
                 {

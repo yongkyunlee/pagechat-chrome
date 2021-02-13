@@ -10,15 +10,14 @@ import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    // AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-  ],
-  providers: [ FirebaseService, AuthService ],
-  bootstrap: [ AppComponent ]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        AngularFireModule.initializeApp(environment.firebase),
+    ],
+    providers: [ FirebaseService, AuthService ],
+    bootstrap: [ AppComponent ]
 })
 export class AppModule { }

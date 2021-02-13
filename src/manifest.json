@@ -5,7 +5,10 @@
     "permissions": [ "tabs", "activeTab" ],
     "description": "Build an Extension!",
     "background": {
-        "scripts": ["backgroundPage.js"],
+        "scripts": [
+            "background.js",
+            "runtime.js"
+        ],
         "persistent": false
     },
     "browser_action": {
