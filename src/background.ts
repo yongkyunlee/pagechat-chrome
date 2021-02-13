@@ -1,8 +1,9 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/firestore';
 
-let userUid = '';
+let userUid = null;
 
 const firebaseConfig = {
     apiKey: "AIzaSyC6KqtZ1MGPxcHFrVYmqlIANU589g9x2xw",
@@ -28,23 +29,39 @@ const isOnlineForDatabase = {
     last_changed: firebase.database.ServerValue.TIMESTAMP,
 };
 
+const isOfflineForFirestore = {
+    state: 'offline',
+    last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+};
+
+const isOnlineForFirestore = {
+    state: 'online',
+    last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+};
+
 firebase.auth().onAuthStateChanged(user => {
     if (user) { // If the user is signed in
         userUid = user.uid;
         const userStatusDatabaseRef = firebase.database().ref('/status/' + user.uid);
+        const userStatusFirestoreRef = firebase.firestore().doc('/status/' + user.uid);
+
         firebase.database().ref('.info/connected').on('value', function(snapshot) {
             // If we're not currently connected, don't do anything.
             console.log('connected');
             if (snapshot.val() == false) {
+                userStatusFirestoreRef.set(isOfflineForFirestore);
                 return;
             };
             userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
                 userStatusDatabaseRef.set(isOnlineForDatabase);
+                userStatusFirestoreRef.set(isOnlineForFirestore);
             });
         });
     }
     else {
         console.log(userUid + " signed out");
         firebase.database().ref('/status/' + userUid).set(isOfflineForDatabase);
+        firebase.firestore().doc('/status/' + userUid).set(isOfflineForFirestore);
+        userUid = null;
     }
-})
+});
