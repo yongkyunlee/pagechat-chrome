@@ -12,6 +12,8 @@ import { ChatService } from "src/app/services/chat.service";
 
 export class AppComponent implements OnInit {
     public url: string = '';
+    public title: string = '';
+    public urlObject: URL;
     public authLoaded = false;
     private uid: string;
     public friendUid = '';
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit {
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {
             this.zone.run(() => {
                 this.url = tabs[0].url;
+                this.title = tabs[0].title;
+                this.urlObject = new URL(this.url);
             });
 
             this.authService.afAuth.user.subscribe(data => {

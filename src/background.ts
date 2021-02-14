@@ -6,11 +6,29 @@ import 'firebase/firestore';
 let userUid = null;
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)  => {
-    if (changeInfo.status === 'complete') {
+    if (changeInfo.status === 'complete' && userUid) {
         firebase.firestore().collection('/history/' + userUid + '/pages').add({
             'url': tab.url,
             'title': tab.title,
             'timestamp': firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        firebase.firestore().doc('/status/' + userUid).update({
+            'currentUrl': tab.url,
+            'currentTitle': tab.title,
+            'timestamp': firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+});
+
+chrome.tabs.onActivated.addListener((activeInfo)  => {
+    if (userUid) {
+        chrome.tabs.get(activeInfo.tabId, (data) => {
+            firebase.firestore().doc('/status/' + userUid).update({
+                'currentUrl': data.url,
+                'currentTitle': data.title,
+                'timestamp': firebase.firestore.FieldValue.serverTimestamp()
+            });
         });
     }
 });
@@ -70,16 +88,6 @@ firebase.auth().onAuthStateChanged(user => {
             userStatusDatabaseRef.onDisconnect().update(isOfflineForDatabase).then(function() {
                 userStatusDatabaseRef.set(isOnlineForDatabase);
                 userStatusFirestoreRef.set(isOnlineForFirestore);
-            });
-        });
-
-        chrome.tabs.onActivated.addListener((activeInfo)  => {
-            chrome.tabs.get(activeInfo.tabId, (data) => {
-                firebase.firestore().doc('/status/' + userUid).update({
-                    'currentUrl': data.url,
-                    'currentTitle': data.title,
-                    'timestamp': firebase.firestore.FieldValue.serverTimestamp()
-                });
             });
         });
     }

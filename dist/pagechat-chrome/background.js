@@ -15097,11 +15097,27 @@ __webpack_require__.r(__webpack_exports__);
 
 let userUid = null;
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete') {
+    if (changeInfo.status === 'complete' && userUid) {
         firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore().collection('/history/' + userUid + '/pages').add({
             'url': tab.url,
             'title': tab.title,
             'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore.FieldValue.serverTimestamp()
+        });
+        firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore().doc('/status/' + userUid).update({
+            'currentUrl': tab.url,
+            'currentTitle': tab.title,
+            'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore.FieldValue.serverTimestamp()
+        });
+    }
+});
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    if (userUid) {
+        chrome.tabs.get(activeInfo.tabId, (data) => {
+            firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore().doc('/status/' + userUid).update({
+                'currentUrl': data.url,
+                'currentTitle': data.title,
+                'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore.FieldValue.serverTimestamp()
+            });
         });
     }
 });
@@ -15152,15 +15168,6 @@ firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].auth().onAuthStateChanged(u
             userStatusDatabaseRef.onDisconnect().update(isOfflineForDatabase).then(function () {
                 userStatusDatabaseRef.set(isOnlineForDatabase);
                 userStatusFirestoreRef.set(isOnlineForFirestore);
-            });
-        });
-        chrome.tabs.onActivated.addListener((activeInfo) => {
-            chrome.tabs.get(activeInfo.tabId, (data) => {
-                firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore().doc('/status/' + userUid).update({
-                    'currentUrl': data.url,
-                    'currentTitle': data.title,
-                    'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore.FieldValue.serverTimestamp()
-                });
             });
         });
     }
