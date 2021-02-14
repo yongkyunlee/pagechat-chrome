@@ -35,7 +35,7 @@
         </div>
         
         <!-- 1 of 2 views: if not chatting, can see list of people -->
-        <div *ngIf='!_chatService.inchat'>
+        <div *ngIf='!chatService.inchat'>
             <div *ngIf="authService.afAuth.user | async">
                 <div>
                     <p>Friends List</p>
@@ -84,7 +84,7 @@
         </div>
 
         <!-- 2 of 2 views: chatting -->
-        <div *ngIf='_chatService.inchat'>
+        <div *ngIf='chatService.inchat'>
             <div *ngIf='(authService.afAuth.user | async)'>
                 <!-- basically switches between the views -->
                 <button (click)='closeChat()'>
