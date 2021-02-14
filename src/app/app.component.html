@@ -56,8 +56,9 @@
                             <div class='friend-header-div'>
                                 <div>
                                     <span class='green-circle-span'>🟢</span>
-                                    <span class='friend-email-span' [ngStyle]="{'color': (hasSentMsg(user.uid)) ? '#005c66' : '#000000'}">
-                                        {{ user.email ? user.email : user.uid }}<b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
+                                    <span class='friend-email-span'>
+                                        {{ user.email ? user.email : user.uid }}
+                                        <b style='color:red' *ngIf='user.isUnread'>*</b>
                                     </span>
                                 </div>
                                 <button class='chat-button' (click)='updateRoom(user.uid)'>
@@ -79,8 +80,8 @@
                             <div class='user-header-div'>
                                 <div>
                                     <span class='green-circle-span'>🟢</span>
-                                    <span class='user-email-span' [ngStyle]="{'color': (hasSentMsg(user.uid)) ? '#005c66' : '#000000'}">
-                                        Anonymous User<b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
+                                    <span class='user-email-span'>
+                                        Anonymous User<b style='color:red' *ngIf='user.isUnread'>*</b>
                                     </span>
                                 </div>
                                 

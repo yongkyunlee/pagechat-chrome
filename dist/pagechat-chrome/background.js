@@ -15179,14 +15179,14 @@ firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].auth().onAuthStateChanged(u
                 senders.push(doc.data());
             });
             chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
-            if (senders.length == 0) {
+            if (senders.length > 10) {
                 badgeText = '';
             }
-            else if (senders.length <= 10) {
+            else if (senders.length > 0 && senders.length <= 10) {
                 badgeText = '' + senders.length;
             }
             else {
-                badgeText = '10+';
+                badgeText = '';
             }
             chrome.browserAction.setBadgeText({ text: badgeText });
         });

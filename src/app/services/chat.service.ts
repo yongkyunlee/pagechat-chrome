@@ -109,16 +109,17 @@ export class ChatService {
         return this.itemsCollection.doc(message.from_uid + message.date).set(message);
     }
 
-    getUnreads() {
+    getUnreads(uid: string, friends: String[]) {
         return this._angularFirestore.collection<Message>(CHATS_COLLECTION,
-            ref => ref.where('to_uid', '==', this.user.uid).where('read', '==', false))
+            ref => ref.where('to_uid', '==', uid).where('read', '==', false))
             .snapshotChanges()
             .pipe(map(actions => {
                 return actions.map(a => {
-                    const data = a.payload.doc.data() as Message;
+                    const data = a.payload.doc.data();// as Message;
                     const id = a.payload.doc.id;                    
                     return {
-                        id,
+                        uid: id,
+                        hasUnread : friends.includes(a.payload.doc.id),
                         ...data
                     };
                 });

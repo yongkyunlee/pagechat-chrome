@@ -49,18 +49,19 @@ export class AppComponent implements OnInit {
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
                     // leave this alone for now bc friends needs it
-                    this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
+                    this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid), this.unreads).subscribe(data => {
                         this.onlineUsers = data.filter(item => !!item);
                     })
                     // get only strangers on same page
-                    this.firebaseService.getSamePageAnons(this.uid, this.friends.map(x => x.uid), this.url).subscribe(data => {
+                    this.firebaseService.getSamePageAnons(this.uid, this.friends.map(x => x.uid), this.url, this.unreads).subscribe(data => {
                         this.samePageAnons = data.filter(item => !!item);
                     })
                 });
 
                 // for getting unread messages
-                this.chatService.getUnreads().subscribe(data => {
+                this.chatService.getUnreads(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
                     this.unreads = data.map(function(a) {return a.from_uid;});
+                    // this.unreads = data.filter(item => !!item);
                     this.chatService.unreads = this.unreads
                 })
             });

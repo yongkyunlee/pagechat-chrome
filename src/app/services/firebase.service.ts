@@ -41,7 +41,7 @@ export class FirebaseService {
                 )
     }
 
-    getOnlineUsers(uid: string, friends: String[]) {
+    getOnlineUsers(uid: string, friends: String[], unreads: String[]) {
         return this.afs.collection(STATUS_COLLECTION,
                 ref => ref.where('state', '==', 'online'))
             .snapshotChanges()
@@ -53,6 +53,7 @@ export class FirebaseService {
                             return {
                                 uid: a.payload.doc.id,
                                 isFriend: friends.includes(a.payload.doc.id),
+                                isUnread: unreads.some((sender) => sender == uid),
                                 ...status
                             };
                         }
@@ -61,8 +62,7 @@ export class FirebaseService {
             )
     }
 
-    getSamePageAnons(uid: string, friends: String[], url: string) {
-        console.error(friends);
+    getSamePageAnons(uid: string, friends: String[], url: string, unreads: String[]) {
         return this.afs.collection(STATUS_COLLECTION,
             ref => ref.where('currentUrl', '==', url))
             // below not working, do friend filtering inside
@@ -76,6 +76,7 @@ export class FirebaseService {
                         return {
                             uid: a.payload.doc.id,
                             isFriend: friends.includes(a.payload.doc.id),
+                            isUnread: unreads.includes(''+a.payload.doc.id),
                             ...status
                         };
                     }
