@@ -41,11 +41,10 @@ export class AppComponent implements OnInit {
 
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
-                })
-
-                this.firebaseService.getOnlineUsers(this.uid, this.friends).subscribe(data => {
-                    this.onlineUsers = data;
-                })
+                    this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
+                        this.onlineUsers = data.filter(item => !!item);
+                    })
+                });
             });
         }) 
     }
@@ -60,8 +59,8 @@ export class AppComponent implements OnInit {
 
     addFriend() {
         if (this.uid !== null || this.uid !== undefined) {
-            alert(this.friendUid);
             this.firebaseService.addFriend(this.uid, this.friendUid);
+            this.friendUid = '';
         }
     }        
 

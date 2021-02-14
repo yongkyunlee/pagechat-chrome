@@ -18,13 +18,11 @@ export class FirebaseService {
 
     addFriend(myUid, friendUid) {
         this.afs.collection(FRIENDS_COLLECTION).doc(myUid).collection(FRIENDS_COLLECTION)
-                .add({
-                    'uid': friendUid,
+                .doc(friendUid).set({
                     'timestamp': firebase.firestore.FieldValue.serverTimestamp()
                 });
         this.afs.collection(FRIENDS_COLLECTION).doc(friendUid).collection(FRIENDS_COLLECTION)
-                .add({
-                    'uid': myUid,
+                .doc(myUid).set({
                     'timestamp': firebase.firestore.FieldValue.serverTimestamp()
                 });
     }
@@ -36,7 +34,7 @@ export class FirebaseService {
                     map(actions => {
                         return actions.map(a => {
                             return {
-                                uid: a.payload.doc.data().uid
+                                uid: a.payload.doc.id
                             };
                         });
                     })
@@ -54,65 +52,12 @@ export class FirebaseService {
                         if (uid !== a.payload.doc.id) {
                             return {
                                 uid: a.payload.doc.id,
-                                last_changed: status.last_changed,
-                                currentTitle: status.currentTitle,
-                                currentUrl: status.currentUrl,
-                                timestamp: status.timestamp,
-                                isFriend: friends.includes(a.payload.doc.id)
+                                isFriend: friends.includes(a.payload.doc.id),
+                                ...status
                             };
                         }
                     });
                 })
             )
     }
-
-
-
-
-
-
-    // getTabId(name){
-    //     var tabId = name.toLowerCase();
-    //     tabId = tabId.replace(" ","_");
-    //     return tabId;
-    // }
-
-    // getTab(tabUrl){
-    //     //return this.db.collection('tabs').doc(tabId).snapshotChanges();
-    //     return this.db.collection('tabs', ref => ref.where('url', '==', tabUrl)).snapshotChanges();
-    // }
-
-    // createTab(tab: MyTab){
-    //     return this.db.collection('tabs').add({
-    //     title: tab.title,
-    //     url: tab.url,
-    //     favIconUrl: tab.favIconUrl,
-    //     windowId: tab.windowId,
-    //     tabIndex: tab.tabIndex,
-    //     dateAdded: Date()
-    //     });
-    // }
-
-    // getTabs(){
-    //     return this.db.collection('tabs').snapshotChanges();
-    // }
-
-    // updateTab(tab: MyTab){
-    //     tab.url = tab.url.toLowerCase();
-    //     return this.db.collection('tabs').doc(tab.id).set(tab);
-    // }
-
-    // deleteTab(tab: MyTab){
-    //     return this.db.collection('tabs').doc(tab.id).delete();
-    // }
-
-    // searchTabs(searchValue){
-    //     return this.db.collection('tabs',ref => ref.where('name', '>=', searchValue)
-    //     .where('name', '<=', searchValue + '\uf8ff'))
-    //     .snapshotChanges()
-    // }
-
-    // searchTabsByName(value){
-    //     return this.db.collection('tabs',ref => ref.orderBy('name').startAt(value)).snapshotChanges();
-    // }
 }
