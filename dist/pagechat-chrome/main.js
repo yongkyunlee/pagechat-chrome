@@ -129,7 +129,7 @@ function AppComponent_div_11_div_3_div_8_div_1_Template(rf, ctx) { if (rf & 1) {
 } if (rf & 2) {
     const user_r14 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]().$implicit;
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", user_r14.uid, " ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", user_r14.email ? user_r14.email : user_r14.uid, " ");
 } }
 function AppComponent_div_11_div_3_div_8_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div");
@@ -246,9 +246,9 @@ class AppComponent {
                 this.uid = data.uid;
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
-                });
-                this.firebaseService.getOnlineUsers(this.uid, this.friends).subscribe(data => {
-                    this.onlineUsers = data.filter(item => !!item);
+                    this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
+                        this.onlineUsers = data.filter(item => !!item);
+                    });
                 });
             });
         });
@@ -325,13 +325,11 @@ class FirebaseService {
     }
     addFriend(myUid, friendUid) {
         this.afs.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["FRIENDS_COLLECTION"]).doc(myUid).collection(_constants__WEBPACK_IMPORTED_MODULE_2__["FRIENDS_COLLECTION"])
-            .add({
-            'uid': friendUid,
+            .doc(friendUid).set({
             'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_1__["default"].firestore.FieldValue.serverTimestamp()
         });
         this.afs.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["FRIENDS_COLLECTION"]).doc(friendUid).collection(_constants__WEBPACK_IMPORTED_MODULE_2__["FRIENDS_COLLECTION"])
-            .add({
-            'uid': myUid,
+            .doc(myUid).set({
             'timestamp': firebase_app__WEBPACK_IMPORTED_MODULE_1__["default"].firestore.FieldValue.serverTimestamp()
         });
     }
@@ -341,7 +339,7 @@ class FirebaseService {
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(actions => {
             return actions.map(a => {
                 return {
-                    uid: a.payload.doc.data().uid
+                    uid: a.payload.doc.id
                 };
             });
         }));
@@ -353,14 +351,7 @@ class FirebaseService {
             return actions.map(a => {
                 const status = a.payload.doc.data();
                 if (uid !== a.payload.doc.id) {
-                    return {
-                        uid: a.payload.doc.id,
-                        last_changed: status.last_changed,
-                        currentTitle: status.currentTitle,
-                        currentUrl: status.currentUrl,
-                        timestamp: status.timestamp,
-                        isFriend: friends.includes(a.payload.doc.id)
-                    };
+                    return Object.assign({ uid: a.payload.doc.id, isFriend: friends.includes(a.payload.doc.id) }, status);
                 }
             });
         }));

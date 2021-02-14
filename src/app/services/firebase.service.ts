@@ -18,13 +18,11 @@ export class FirebaseService {
 
     addFriend(myUid, friendUid) {
         this.afs.collection(FRIENDS_COLLECTION).doc(myUid).collection(FRIENDS_COLLECTION)
-                .add({
-                    'uid': friendUid,
+                .doc(friendUid).set({
                     'timestamp': firebase.firestore.FieldValue.serverTimestamp()
                 });
         this.afs.collection(FRIENDS_COLLECTION).doc(friendUid).collection(FRIENDS_COLLECTION)
-                .add({
-                    'uid': myUid,
+                .doc(myUid).set({
                     'timestamp': firebase.firestore.FieldValue.serverTimestamp()
                 });
     }
@@ -36,7 +34,7 @@ export class FirebaseService {
                     map(actions => {
                         return actions.map(a => {
                             return {
-                                uid: a.payload.doc.data().uid
+                                uid: a.payload.doc.id
                             };
                         });
                     })
@@ -54,11 +52,8 @@ export class FirebaseService {
                         if (uid !== a.payload.doc.id) {
                             return {
                                 uid: a.payload.doc.id,
-                                last_changed: status.last_changed,
-                                currentTitle: status.currentTitle,
-                                currentUrl: status.currentUrl,
-                                timestamp: status.timestamp,
-                                isFriend: friends.includes(a.payload.doc.id)
+                                isFriend: friends.includes(a.payload.doc.id),
+                                ...status
                             };
                         }
                     });

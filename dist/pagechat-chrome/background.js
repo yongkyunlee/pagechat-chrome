@@ -15136,6 +15136,10 @@ const isOnlineForFirestore = {
 firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].auth().onAuthStateChanged(user => {
     if (user) { // If the user is signed in
         userUid = user.uid;
+        isOfflineForDatabase['email'] = user.email;
+        isOnlineForDatabase['email'] = user.email;
+        isOfflineForFirestore['email'] = user.email;
+        isOnlineForFirestore['email'] = user.email;
         const userStatusDatabaseRef = firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].database().ref('/status/' + user.uid);
         const userStatusFirestoreRef = firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].firestore().doc('/status/' + user.uid);
         firebase_app__WEBPACK_IMPORTED_MODULE_0__["default"].database().ref('.info/connected').on('value', function (snapshot) {

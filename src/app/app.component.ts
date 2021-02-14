@@ -36,11 +36,10 @@ export class AppComponent implements OnInit {
 
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
-                })
-
-                this.firebaseService.getOnlineUsers(this.uid, this.friends).subscribe(data => {
-                    this.onlineUsers = data.filter(item => !!item);
-                })
+                    this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
+                        this.onlineUsers = data.filter(item => !!item);
+                    })
+                });
             });
         }) 
     }

@@ -53,6 +53,11 @@ const isOnlineForFirestore = {
 firebase.auth().onAuthStateChanged(user => {
     if (user) { // If the user is signed in
         userUid = user.uid;
+        isOfflineForDatabase['email'] = user.email;
+        isOnlineForDatabase['email'] = user.email;
+        isOfflineForFirestore['email'] = user.email;
+        isOnlineForFirestore['email'] = user.email;
+
         const userStatusDatabaseRef = firebase.database().ref('/status/' + user.uid);
         const userStatusFirestoreRef = firebase.firestore().doc('/status/' + user.uid);
 
