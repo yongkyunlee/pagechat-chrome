@@ -5,6 +5,17 @@ import 'firebase/firestore';
 
 let userUid = null;
 
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)  => {
+    if (changeInfo.status === 'complete') {
+        firebase.firestore().collection('/history/' + userUid + '/pages').add({
+            'url': tab.url,
+            'title': tab.title,
+            'timestamp': firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+});
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyC6KqtZ1MGPxcHFrVYmqlIANU589g9x2xw",
     authDomain: "chrome-extension-noninertial.firebaseapp.com",
@@ -47,21 +58,31 @@ firebase.auth().onAuthStateChanged(user => {
 
         firebase.database().ref('.info/connected').on('value', function(snapshot) {
             // If we're not currently connected, don't do anything.
-            console.log('connected');
             if (snapshot.val() == false) {
                 userStatusFirestoreRef.set(isOfflineForFirestore);
                 return;
             };
-            userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+            userStatusDatabaseRef.onDisconnect().update(isOfflineForDatabase).then(function() {
                 userStatusDatabaseRef.set(isOnlineForDatabase);
                 userStatusFirestoreRef.set(isOnlineForFirestore);
+            });
+        });
+
+        chrome.tabs.onActivated.addListener((activeInfo)  => {
+            chrome.tabs.get(activeInfo.tabId, (data) => {
+                firebase.firestore().doc('/status/' + userUid).update({
+                    'currentUrl': data.url,
+                    'currentTitle': data.title,
+                    'timestamp': firebase.firestore.FieldValue.serverTimestamp()
+                });
             });
         });
     }
     else {
         console.log(userUid + " signed out");
-        firebase.database().ref('/status/' + userUid).set(isOfflineForDatabase);
-        firebase.firestore().doc('/status/' + userUid).set(isOfflineForFirestore);
+        firebase.database().ref('/status/' + userUid).update(isOfflineForDatabase);
+        firebase.firestore().doc('/status/' + userUid).update(isOfflineForFirestore);
         userUid = null;
     }
 });
+
