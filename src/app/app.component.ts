@@ -13,7 +13,10 @@ export class AppComponent implements OnInit {
     public authLoaded = false;
     private uid: string;
     public friendUid = '';
+    public email = '';
+    public password = '';
     public friends = [];
+    public onlineUsers = [];
 
     constructor (
         private zone: NgZone,
@@ -31,11 +34,23 @@ export class AppComponent implements OnInit {
                 this.authLoaded = true;
                 this.uid = data.uid;
 
-                this.firebaseService.getFirends(data.uid).subscribe(data => {
+                this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
+                })
+
+                this.firebaseService.getOnlineUsers(this.uid, this.friends).subscribe(data => {
+                    this.onlineUsers = data;
                 })
             });
         }) 
+    }
+
+    signInWithEmail() {
+        this.authService.signInViaEmail(this.email, this.password);
+    }
+
+    signUpWithEmail() {
+        this.authService.signUpViaEmail(this.email, this.password);
     }
 
     addFriend() {

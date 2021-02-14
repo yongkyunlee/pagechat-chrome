@@ -11,14 +11,53 @@
     </div>
     <div *ngIf="authLoaded">
         <div *ngIf="(authService.afAuth.user | async) === null">
-            <button (click)='authService.signInWithGoogle()'>
-                Sign in with Google
-            </button>
+            <div>
+                <label>Email</label>
+                <input [(ngModel)]="email" type="email">
+            </div>
+            <div>
+                <label>Passowrd</label>
+                <input [(ngModel)]="password" type="password">
+            </div>
+            <div>
+                <button (click)="signInWithEmail()">
+                    Sign In
+                </button>
+                <button (click)="signUpWithEmail()">
+                    SignUp
+                </button>
+            </div>
+            <div>
+                <button (click)='authService.signInWithGoogle()'>
+                    Sign in with Google
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <p>Friends List</p>
+            <div *ngFor='let friend of friends'>
+                {{ friend.uid }}
+            </div>
+        </div>
+        <div>
+            <p>Online Friends</p>
+            <div *ngFor='let user of onlineUsers'>
+                <div *ngIf='user.isFriend'>
+                    {{ user.uid }}
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p>Online Users</p>
+            <div *ngFor='let user of onlineUsers'>
+                <div *ngIf='!user.isFriend'>
+                    {{ user.uid  }}
+                </div>
+            </div>
         </div>
         
-        <div *ngFor='let friend of friends'>
-            {{ friend.uid }}
-        </div>
         <div *ngIf="authService.afAuth.user | async">
             <input [(ngModel)]="friendUid" type="text">
             <button (click)="addFriend()">
