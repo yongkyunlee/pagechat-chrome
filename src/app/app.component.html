@@ -16,26 +16,26 @@
         <span>🟢</span> <span>{{ title }}</span>
     </div> -->
     <div *ngIf="authLoaded">
-        <div *ngIf="(authService.afAuth.user | async) === null">
-            <div>
-                <label>Email</label>
-                <input [(ngModel)]="email" type="email">
+        <div *ngIf="(authService.afAuth.user | async) === null" class='auth-div'>
+            <div class='auth-input-div'>
+                <div class='auth-label-div'>Email</div>
+                <input [(ngModel)]="email" type="email" class='auth-input'>
             </div>
-            <div>
-                <label>Passowrd</label>
-                <input [(ngModel)]="password" type="password">
+            <div class='auth-input-div'>
+                <div class='auth-label-div'>Passowrd</div>
+                <input [(ngModel)]="password" type="password" class='auth-input'>
             </div>
-            <div>
-                <button (click)="signInWithEmail()">
-                    Sign In
+            <div class='auth-button-div'>
+                <button (click)="signInWithEmail()" class='auth-button'>
+                    <strong>Sign In</strong>
                 </button>
-                <button (click)="signUpWithEmail()">
-                    SignUp
+                <button (click)="signUpWithEmail()" class='auth-button'>
+                    <strong>Sign Up</strong>
                 </button>
             </div>
-            <div>
-                <button (click)='authService.signInWithGoogle()'>
-                    Sign in with Google
+            <div class='google-auth-div'>
+                <button (click)='authService.signInWithGoogle()' class='google-auth-button'>
+                    <strong>Sign in with Google</strong>
                 </button>
             </div>
         </div>
