@@ -110,4 +110,8 @@ export class AppComponent implements OnInit {
         }
         this.chatService.inchat=true;
     }
+
+    hasSentMsg(uid_in: string) {
+        return this.unreads.some((sender) => sender == uid_in);
+    }
 }

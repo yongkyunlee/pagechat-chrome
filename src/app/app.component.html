@@ -49,6 +49,7 @@
                         {{ friend.uid }}
                     </div>
                 </div> -->
+                <div>{{unreads}}</div>
                 <div class='online-friends-div'>
                     <div class='online-friends-header-div'>Friends Online</div>
                     <div *ngFor='let user of onlineUsers'>
@@ -56,8 +57,8 @@
                             <div class='friend-header-div'>
                                 <div>
                                     <span class='green-circle-span'>🟢</span>
-                                    <span class='friend-email-span'>
-                                        {{ user.email ? user.email : user.uid }}
+                                    <span class='friend-email-span' [ngStyle]="{'color': (hasSentMsg(user.uid)) ? '#005c66' : '#000000'}">
+                                        {{ user.email ? user.email : user.uid }}<b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
                                     </span>
                                 </div>
                                 <button class='chat-button' (click)='updateRoom(user.uid)'>
