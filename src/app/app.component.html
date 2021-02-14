@@ -53,7 +53,7 @@
             <div>
                 <p>Online Users</p>
                 <div *ngFor='let user of onlineUsers'>
-                    <div *ngIf='!user.isFriend && (authService.afAuth.user | async).uid !== user.uid'>
+                    <div *ngIf='!user.isFriend'>
                         {{ user.uid  }}
                     </div>
                 </div>
