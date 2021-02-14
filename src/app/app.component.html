@@ -33,32 +33,32 @@
                 </button>
             </div>
         </div>
-
-        <div>
-            <p>Friends List</p>
-            <div *ngFor='let friend of friends'>
-                {{ friend.uid }}
-            </div>
-        </div>
-        <div>
-            <p>Online Friends</p>
-            <div *ngFor='let user of onlineUsers'>
-                <div *ngIf='user.isFriend'>
-                    {{ user.uid }}
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <p>Online Users</p>
-            <div *ngFor='let user of onlineUsers'>
-                <div *ngIf='!user.isFriend'>
-                    {{ user.uid  }}
-                </div>
-            </div>
-        </div>
         
         <div *ngIf="authService.afAuth.user | async">
+            <div>
+                <p>Friends List</p>
+                <div *ngFor='let friend of friends'>
+                    {{ friend.uid }}
+                </div>
+            </div>
+            <div>
+                <p>Online Friends</p>
+                <div *ngFor='let user of onlineUsers'>
+                    <div *ngIf='user.isFriend'>
+                        {{ user.uid }}
+                    </div>
+                </div>
+            </div>
+    
+            <div>
+                <p>Online Users</p>
+                <div *ngFor='let user of onlineUsers'>
+                    <div *ngIf='!user.isFriend && (authService.afAuth.user | async).uid !== user.uid'>
+                        {{ user.uid  }}
+                    </div>
+                </div>
+            </div>
+
             <input [(ngModel)]="friendUid" type="text">
             <button (click)="addFriend()">
                 Add Friend
