@@ -424,6 +424,8 @@ class AppComponent {
         this.friends = [];
         this.onlineUsers = [];
         this.message = "";
+        // holds a list of people who've sent unread messages
+        // duplicates allowed
         this.unreads = [];
     }
     ngOnInit() {
@@ -442,13 +444,12 @@ class AppComponent {
                         this.onlineUsers = data.filter(item => !!item);
                     });
                 });
+                // for getting unread messages
+                this.chatService.getUnreads().subscribe(data => {
+                    this.unreads = data.map(function (a) { return a.from_uid; });
+                    this.chatService.unreads = this.unreads;
+                });
             });
-            // TODO for getting unread messages
-            // this.chatService.getUnreads().subscribe(data => {
-            //     this.unreads = data;
-            //     console.error('change');
-            //     console.error(data);
-            // })
         });
     }
     signInWithEmail() {
@@ -779,6 +780,7 @@ class ChatService {
         this._angularFireAuth = _angularFireAuth;
         this.user = {};
         this.chats = [];
+        this.unreads = [];
         this._angularFireAuth.authState.subscribe(user => {
             if (!user) {
                 this.user = {};
@@ -817,11 +819,17 @@ class ChatService {
         this._angularFireAuth.signOut();
     }
     loadMessage() {
-        this.itemsCollection = this._angularFirestore.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["CHATS_COLLECTION"], ref => ref.where("roomId", "==", this.roomId).orderBy("date", "desc").limit(10));
+        this.itemsCollection = this._angularFirestore.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["CHATS_COLLECTION"], ref => ref.where("roomId", "==", this.roomId).orderBy("date", "desc").limit(Math.max(10 + this.unreads.length)));
         return this.itemsCollection.valueChanges().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])((messages) => {
             this.chats = [];
             for (let message of messages) {
                 this.chats.unshift(message);
+                // if the message we're displaying is to current user (not sent from current user)
+                // then want to update the read status
+                if (message.to_uid == this.user.uid) {
+                    this._angularFirestore.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["CHATS_COLLECTION"]).doc(message.from_uid + message.date)
+                        .update({ read: true });
+                }
             }
             return this.chats;
         }));
@@ -833,9 +841,24 @@ class ChatService {
             date: firebase_app__WEBPACK_IMPORTED_MODULE_1__["default"].firestore.Timestamp.now().toMillis(),
             from_uid: this.user.uid,
             to_uid: this.friend_uid,
-            roomId: this.roomId
+            roomId: this.roomId,
+            read: false
         };
-        return this.itemsCollection.add(message);
+        return this.itemsCollection.doc(message.from_uid + message.date).set(message);
+    }
+    getUnreads() {
+        return this._angularFirestore.collection(_constants__WEBPACK_IMPORTED_MODULE_2__["CHATS_COLLECTION"], ref => ref.where('to_uid', '==', this.user.uid).where('read', '==', false))
+            .snapshotChanges()
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(actions => {
+            return actions.map(a => {
+                // const message: any = a.payload.doc.data();
+                const data = a.payload.doc.data();
+                const id = a.payload.doc.id;
+                this.unreads = [];
+                this.unreads.unshift(data);
+                return Object.assign({ id }, data);
+            });
+        }));
     }
 }
 ChatService.ɵfac = function ChatService_Factory(t) { return new (t || ChatService)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__["AngularFirestore"]), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_fire_auth__WEBPACK_IMPORTED_MODULE_5__["AngularFireAuth"])); };

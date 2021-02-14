@@ -23,6 +23,8 @@ export class AppComponent implements OnInit {
     public onlineUsers = [];
     message: string = "";
     element: any;
+    // holds a list of people who've sent unread messages
+    // duplicates allowed
     public unreads = [];
 
     constructor (
@@ -43,23 +45,19 @@ export class AppComponent implements OnInit {
             this.authService.afAuth.user.subscribe(data => {
                 this.authLoaded = true;
                 this.uid = data.uid;
-
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
                     this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
                         this.onlineUsers = data.filter(item => !!item);
                     })
                 });
+
+                // for getting unread messages
+                this.chatService.getUnreads().subscribe(data => {
+                    this.unreads = data.map(function(a) {return a.from_uid;});
+                    this.chatService.unreads = this.unreads
+                })
             });
-
-            // TODO for getting unread messages
-            // this.chatService.getUnreads().subscribe(data => {
-            //     this.unreads = data;
-            //     console.error('change');
-            //     console.error(data);
-
-            // })
-
         }) 
     }
 
