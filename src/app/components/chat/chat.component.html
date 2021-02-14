@@ -1,0 +1,50 @@
+<div class="chat-window">
+  <div class="row">
+    <div class="col">
+      <h1>Chat</h1>
+    </div>
+    <div class="col-3" *ngIf="_chatService.user.photo">
+      <img [src]="_chatService.user.photo" class="img-fluid avatar" />
+    </div>
+  </div>
+  <hr />
+  <div class="app-messages" id="app-messages">
+    <div
+      [ngClass]="{ 'text-right': _chatService.user.uid === chat.uid }"
+      *ngFor="let chat of _chatService.chats"
+    >
+      <span
+        class="badge"
+        [ngClass]="{
+          'badge-primary': _chatService.user.uid === chat.uid,
+          'badge-success': _chatService.user.uid !== chat.uid
+        }"
+        >{{ chat.name }}</span
+      >
+      <p>
+        {{ chat.message }}
+      </p>
+    </div>
+    <!-- <div class="text-right">
+    <span class="badge badge-primary">Yeison</span>
+    <p>
+      este es un mensaje
+    </p>
+  </div>
+  <div>
+    <span class="badge badge-success">Alejandra</span>
+    <p>
+      Saludos
+    </p>
+  </div> -->
+  </div>
+  <hr />
+  <input
+    class="form-control"
+    type="text"
+    name="message"
+    [(ngModel)]="message"
+    (keyup.enter)="sendMessage()"
+    placeholder="Enviar mensaje"
+  />
+</div>
