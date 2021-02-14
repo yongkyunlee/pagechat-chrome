@@ -102,14 +102,14 @@ firebase.auth().onAuthStateChanged(user => {
                 
                 chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
                 
-                if (senders.length == 0) {
+                if (senders.length > 10) {
                     badgeText = '';
                 }
-                else if (senders.length <= 10) {
+                else if (senders.length > 0 && senders.length <= 10) {
                     badgeText = ''+senders.length;
                 }
                 else {
-                    badgeText = '10+';
+                    badgeText = '';
                 }
                 chrome.browserAction.setBadgeText({text: badgeText});
             });
