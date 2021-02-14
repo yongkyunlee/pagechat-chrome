@@ -1,4 +1,213 @@
 .container {
-    width: 400px;
-    height: 600px;
+    width: 300px;
+    height: 400px;
+    padding: 0 5px 0 5px;
+    margin: 0;
+}
+
+.title-div {
+    width: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.header-div {
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.online-friends-div {
+    width: 100%;
+    margin-top: 0.7rem;
+    margin-bottom: 1.2rem;
+}
+
+.online-friends-header-div {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #343d46;
+}
+
+.friend-div {
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.friend-header-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.green-circle-span {
+    font-size: 0.6rem;
+    margin-right: 0.3rem;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 0%;
+}
+
+.friend-email-span {
+    font-size: 1rem;
+}
+
+.chat-button {
+    font-size: 0.8rem;
+    background-color: #4f5b66;
+    color: white;
+    border: 1px solid #4f5b66;
+}
+
+.chat-button:hover {
+    cursor: pointer;
+}
+
+.friend-current-title-div {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+}
+
+.friend-current-title-a {
+    text-decoration: none;
+    color: black;
+}
+
+.friend-current-title-a:hover {
+    color: #1167b1;
+    cursor: pointer;
+}
+
+.online-users-div {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.online-users-header-div {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #343d46;
+}
+
+.user-div {
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.user-header-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-email-span {
+    font-size: 1rem;
+}
+
+.add-friend-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.add-friend-input {
+    width: 12rem;
+}
+
+.add-friend-button {
+    font-size: 0.8rem;
+    background-color: #d0d5de;
+    border: 1px solid black;
+}
+
+.add-friend-button:hover {
+    cursor: pointer;
+}
+
+.button-group-div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.aux-button {
+    width: 9rem;
+}
+
+.aux-button:hover {
+    cursor: pointer;
+}
+
+.sign-out-div {
+    margin-top: 0.8rem;
+    width: 100%;
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+.sign-out-span:hover {
+    cursor: pointer;
+    color: red;
+}
+
+
+// Authentication Design
+
+.auth-div {
+    margin-top: 1rem;
+}
+
+.auth-input-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.auth-label-div {
+    font-size: 1rem;
+    width: 4rem;
+}
+
+.auth-input {
+    width: 13rem;
+}
+
+.auth-button-div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0.8rem 0 0.8rem 0;
+}
+
+.auth-button {
+    width: 9rem;
+    font-size: 0.9rem;
+    background-color: #c0c5ce;
+    padding: 0.2rem;
+    color: black;
+    border: none;
+}
+
+.google-auth-div {
+    width: 100%;
+}
+
+.google-auth-button {
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.auth-button:hover {
+    cursor: pointer;
+}
+
+.google-auth-button:hover {
+    cursor: pointer;
 }

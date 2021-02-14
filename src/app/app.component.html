@@ -1,35 +1,41 @@
 <div class='container'>
-    <div>
-        Page Chat
+    <div class='title-div'>
+        <strong>PageChat</strong>
     </div>
-    <div>
-        <p>Current URL</p>
-        <p>{{url}}</p>
+    <!-- <div class='header-div'>
+        <div><i>Currently reading</i><span class='page-title-span'>{{ title }}</span></div>
+        <div>
+            <span class='hostname-span'>{{ urlObject.hostname }}</span>
+        </div>
+            
+            
+        <p>{{urlObject.hostname}}</p>
         <div>
             {{ (authService.afAuth.user | async)?.uid}}
         </div>
-    </div>
+        <span>🟢</span> <span>{{ title }}</span>
+    </div> -->
     <div *ngIf="authLoaded">
-        <div *ngIf="(authService.afAuth.user | async) === null">
-            <div>
-                <label>Email</label>
-                <input [(ngModel)]="email" type="email">
+        <div *ngIf="(authService.afAuth.user | async) === null" class='auth-div'>
+            <div class='auth-input-div'>
+                <div class='auth-label-div'>Email</div>
+                <input [(ngModel)]="email" type="email" class='auth-input'>
             </div>
-            <div>
-                <label>Passowrd</label>
-                <input [(ngModel)]="password" type="password">
+            <div class='auth-input-div'>
+                <div class='auth-label-div'>Passowrd</div>
+                <input [(ngModel)]="password" type="password" class='auth-input'>
             </div>
-            <div>
-                <button (click)="signInWithEmail()">
-                    Sign In
+            <div class='auth-button-div'>
+                <button (click)="signInWithEmail()" class='auth-button'>
+                    <strong>Sign In</strong>
                 </button>
-                <button (click)="signUpWithEmail()">
-                    SignUp
+                <button (click)="signUpWithEmail()" class='auth-button'>
+                    <strong>Sign Up</strong>
                 </button>
             </div>
-            <div>
-                <button (click)='authService.signInWithGoogle()'>
-                    Sign in with Google
+            <div class='google-auth-div'>
+                <button (click)='authService.signInWithGoogle()' class='google-auth-button'>
+                    <strong>Sign in with Google</strong>
                 </button>
             </div>
         </div>
@@ -37,49 +43,76 @@
         <!-- 1 of 2 views: if not chatting, can see list of people -->
         <div *ngIf='!chatService.inchat'>
             <div *ngIf="authService.afAuth.user | async">
-                <div>
+                <!-- <div>
                     <p>Friends List</p>
                     <div *ngFor='let friend of friends'>
                         {{ friend.uid }}
                     </div>
-                </div>
-                <div>
-                    <p>Online Friends</p>
+                </div> -->
+                <div class='online-friends-div'>
+                    <div class='online-friends-header-div'>Friends Online</div>
                     <div *ngFor='let user of onlineUsers'>
-                        <div *ngIf='user.isFriend'>
-                            {{ user.email ? user.email : user.uid }}
-                            <button (click)='updateRoom(user.uid)'>
-                                chat
-                            </button>
+                        <div *ngIf='user.isFriend' class='friend-div'>
+                            <div class='friend-header-div'>
+                                <div>
+                                    <span class='green-circle-span'>🟢</span>
+                                    <span class='friend-email-span'>
+                                        {{ user.email ? user.email : user.uid }}
+                                    </span>
+                                </div>
+                                <button class='chat-button' (click)='updateRoom(user.uid)'>
+                                    <strong>CHAT</strong>
+                                </button>
+                            </div>
+                            <div class='friend-current-title-div'>
+                                <a target="_blank" [href]='user.currentUrl' class='friend-current-title-a'>
+                                    {{ user.currentTitle }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-        
-                <div>
-                    <p>Online Users</p>
+                <div class='online-users-div'>
+                    <div class='online-users-header-div'>People on the Same Page</div>
                     <div *ngFor='let user of onlineUsers'>
-                        <div *ngIf='!user.isFriend'>
-                            {{ user.uid  }}
-                            <button (click)='updateRoom(user.uid)'>
-                                chat
-                            </button>
+                        <div *ngIf='!user.isFriend' class='user-div'>
+                            <div class='user-header-div'>
+                                <div>
+                                    <span class='green-circle-span'>🟢</span>
+                                    <span class='user-email-span'>
+                                        Anonymous User
+                                    </span>
+                                </div>
+                                
+                                <button class='chat-button' (click)='updateRoom(user.uid)'>
+                                    <strong>CHAT</strong>
+                                </button>
+                            </div>
+        
                         </div>
                     </div>
                 </div>
 
-                <input [(ngModel)]="friendUid" type="text">
-                <button (click)="addFriend()">
-                    Add Friend
-                </button>
-                <button (click)='authService.signOut()'
-                        *ngIf='authService.afAuth.user | async'>
-                    Sign Out
-                </button>
+                <div class='add-friend-div'>
+                    <input [(ngModel)]="friendUid" type="text" class='add-friend-input'>
+                    <button (click)="addFriend()" class='add-friend-button'>
+                        <strong>Add Friend</strong>
+                    </button>
+                </div>
+
+                <div class='button-group-div'>
+                    <!-- basically switches between the views -->
+                    <button (click)='openChat()' class='aux-button'>
+                        Open Last Chat
+                    </button>
+                    <button class='aux-button'>
+                        Settings
+                    </button>
+                </div>
                 
-                <!-- basically switches between the views -->
-                <button (click)='openChat()'>
-                    Open Last Chat
-                </button>
+                <div class='sign-out-div' *ngIf='authService.afAuth.user | async'>
+                    <span (click)='authService.signOut()' class='sign-out-span'>Sign Out</span>
+                </div>                
             </div>
         </div>
 
@@ -99,7 +132,6 @@
             </div>
         </div>
     </div>
-        
 </div>
 
 <!-- <router-outlet></router-outlet> -->
