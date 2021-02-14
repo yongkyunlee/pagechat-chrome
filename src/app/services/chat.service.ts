@@ -9,6 +9,8 @@ import { map } from "rxjs/operators";
 
 import firebase from 'firebase/app';
 
+import { CHATS_COLLECTION } from '../constants';
+
 @Injectable({
   providedIn: "root"
 })
@@ -20,8 +22,8 @@ export class ChatService {
   public roomId: string;
   // if the chat window is (should be) open
   public inchat: boolean;
-  // uid of the current friend
-  public frienduid: string;
+  // uid of the person currently talking to
+  public friend_uid: string;
 
   constructor(
     private _angularFirestore: AngularFirestore,
@@ -72,7 +74,7 @@ export class ChatService {
 
   loadMessage() {
     this.itemsCollection = this._angularFirestore.collection<Message>(
-      "chats",
+      CHATS_COLLECTION,
       ref => ref.where("roomId", "==", this.roomId).orderBy("date", "desc").limit(10)
     );
     return this.itemsCollection.valueChanges().pipe(
@@ -90,10 +92,32 @@ export class ChatService {
     let message: Message = {
       name: this.user.name,
       message: text,
-      date: new Date().getTime(),
-      uid: this.user.uid,
+      date: firebase.firestore.Timestamp.now().toMillis(),
+      from_uid: this.user.uid,
+      to_uid: this.friend_uid,
       roomId: this.roomId
     };
     return this.itemsCollection.add(message);
   }
+
+  // TODO for getting unread messages
+  // getUnreads() {
+  //   return this._angularFirestore.collection(CHATS_COLLECTION,
+  //       ref => ref.where('to_uid', '==', this.user.uid))
+  //   .snapshotChanges()
+  //   .pipe(
+  //     map(actions => {
+  //         return actions.map(a => {
+  //             const message: any = a.payload.doc.data();
+  //             if (this.user.uid !== a.payload.doc.id) {
+  //                 return {
+  //                     uid: a.payload.doc.id,
+  //                     ...message
+  //                 };
+  //             }
+  //         });
+  //     })
+  //   )
+  // }
+
 }

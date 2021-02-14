@@ -1,6 +1,7 @@
 
 export interface Message {
-    uid?: string;
+    from_uid?: string;
+    to_uid?: string;
     name: string;
     message: string;
     date?: number;

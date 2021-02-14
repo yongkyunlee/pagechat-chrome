@@ -21,12 +21,13 @@ export class AppComponent implements OnInit {
     public onlineUsers = [];
     message: string = "";
     element: any;
+    public unreads = [];
 
     constructor (
         private zone: NgZone,
         public authService: AuthService,
         public firebaseService: FirebaseService,
-        public _chatService: ChatService
+        public chatService: ChatService
     ) { }
 
     ngOnInit() {
@@ -46,6 +47,15 @@ export class AppComponent implements OnInit {
                     })
                 });
             });
+
+            // TODO for getting unread messages
+            // this.chatService.getUnreads().subscribe(data => {
+            //     this.unreads = data;
+            //     console.error('change');
+            //     console.error(data);
+
+            // })
+
         }) 
     }
 
@@ -68,7 +78,7 @@ export class AppComponent implements OnInit {
         if (this.message.length === 0) {
             return;
         }
-        this._chatService
+        this.chatService
             .addMessage(this.message)
             .then(() => (this.message = ""))
             .catch(error => console.log("error", error));
@@ -76,23 +86,23 @@ export class AppComponent implements OnInit {
     
 
     closeChat() {
-        this._chatService.inchat = false;
+        this.chatService.inchat = false;        
     }
 
     openChat() {
-        this._chatService.inchat = true;
+        this.chatService.inchat = true;
     }
 
     updateRoom(uid_in: string) {
         // roomId is friend's uid and this user's uid, appended
         // in alphabetical order. just a temporary way to hash
-        this._chatService.frienduid = uid_in;
-        if (uid_in < this._chatService.user.uid) {
-            this._chatService.roomId = uid_in + this._chatService.user.uid;
+        this.chatService.friend_uid = uid_in;
+        if (uid_in < this.chatService.user.uid) {
+            this.chatService.roomId = uid_in + this.chatService.user.uid;
         }
         else {
-            this._chatService.roomId = this._chatService.user.uid + uid_in;
+            this.chatService.roomId = this.chatService.user.uid + uid_in;
         }
-        this._chatService.inchat=true;
+        this.chatService.inchat=true;
     }
 }
