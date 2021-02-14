@@ -5,22 +5,30 @@
     <div>
         <p>Current URL</p>
         <p>{{url}}</p>
-        <div *ngFor="let str of arr">
-            {{str}}
-        </div>
         <div>
             {{ (authService.afAuth.user | async)?.uid}}
         </div>
     </div>
     <div *ngIf="authLoaded">
-        <button (click)='authService.signInWithGoogle()'
-                *ngIf="(authService.afAuth.user | async) === null">
-            Sign in with Google
-        </button>
-        <button (click)='authService.signOut()'
-                *ngIf='authService.afAuth.user | async'>
-            Sign Out
-        </button>
+        <div *ngIf="(authService.afAuth.user | async) === null">
+            <button (click)='authService.signInWithGoogle()'>
+                Sign in with Google
+            </button>
+        </div>
+        
+        <div *ngFor='let friend of friends'>
+            {{ friend.uid }}
+        </div>
+        <div *ngIf="authService.afAuth.user | async">
+            <input [(ngModel)]="friendUid" type="text">
+            <button (click)="addFriend()">
+                Add Friend
+            </button>
+            <button (click)='authService.signOut()'
+                    *ngIf='authService.afAuth.user | async'>
+                Sign Out
+            </button>
+        </div>
     </div>
 </div>
 

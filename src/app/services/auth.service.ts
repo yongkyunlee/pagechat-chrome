@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 import firebase from 'firebase/app';
 
-
 @Injectable({
     providedIn: 'root'
 })
