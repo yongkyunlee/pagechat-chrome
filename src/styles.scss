@@ -1,51 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
-.main-container {
-    margin-top: 40px;
-    margin-bottom: 150px;
-  }
-  
-  .cursor-pointer {
-    cursor: pointer;
-  }
-  
-  .chat-window {
-    padding: 10px;
-    width: 300px;
-    height: 430px;
-    overflow: hidden;
-    border: 1px solid #4080ff;
-    border-radius: 20px;
-  }
-  
-  .app-messages {
-    overflow-y: scroll;
-    height: 250px;
-    /*background:gray;*/
-    padding: 5px;
-  }
-  
-  .avatar {
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-  }
-  
-  /* Animaciones */
-  .animated {
+/* Animaciones */
+.animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
-  }
+}
   
-  .fast {
+.fast {
     -webkit-animation-duration: 0.3s;
     animation-duration: 0.3s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
-  }
+}
   
-  @keyframes fadeIn {
+@keyframes fadeIn {
     from {
       opacity: 0;
     }
@@ -53,8 +21,8 @@
     to {
       opacity: 1;
     }
-  }
+}
   
-  .fadeIn {
+.fadeIn {
     animation-name: fadeIn;
-  }
+}
