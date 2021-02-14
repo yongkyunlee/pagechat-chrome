@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
         this.url = 'aa';
         this.authService.afAuth.user.subscribe(data => {
             this.authLoaded = true;
+            // this._chatService.inchat = false;
         });
     }
 
@@ -38,4 +39,25 @@ export class AppComponent implements OnInit {
             .then(() => (this.message = ""))
             .catch(error => console.log("error", error));
         }
+
+    closeChat() {
+        this._chatService.inchat = false;
+    }
+
+    openChat() {
+        this._chatService.inchat = true;
+    }
+
+    updateRoom(uid: string) {
+        // roomId is friend's uid and this user's uid, appended
+        // in alphabetical order. just a temporary way to hash
+        this._chatService.frienduid = uid;
+        if (uid < this._chatService.user.uid) {
+            this._chatService.roomId = uid + this._chatService.user.uid;
+        }
+        else {
+            this._chatService.roomId = this._chatService.user.uid + uid;
+        }
+        this._chatService.inchat=true;
+    }
 }
