@@ -115,13 +115,8 @@ export class ChatService {
             .snapshotChanges()
             .pipe(map(actions => {
                 return actions.map(a => {
-                    // const message: any = a.payload.doc.data();
                     const data = a.payload.doc.data() as Message;
-                    const id = a.payload.doc.id;
-                    this.unreads= [];
-                
-                    this.unreads.unshift(data);
-                    
+                    const id = a.payload.doc.id;                    
                     return {
                         id,
                         ...data

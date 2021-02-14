@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     public password = '';
     public friends = [];
     public onlineUsers = [];
+    public samePageAnons = [];
     message: string = "";
     element: any;
     // holds a list of people who've sent unread messages
@@ -47,8 +48,13 @@ export class AppComponent implements OnInit {
                 this.uid = data.uid;
                 this.firebaseService.getFriends(data.uid).subscribe(data => {
                     this.friends = data;
+                    // leave this alone for now bc friends needs it
                     this.firebaseService.getOnlineUsers(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
                         this.onlineUsers = data.filter(item => !!item);
+                    })
+                    // get only strangers on same page
+                    this.firebaseService.getSamePageAnons(this.uid, this.friends.map(x => x.uid), this.url).subscribe(data => {
+                        this.samePageAnons = data.filter(item => !!item);
                     })
                 });
 

@@ -60,4 +60,27 @@ export class FirebaseService {
                 })
             )
     }
+
+    getSamePageAnons(uid: string, friends: String[], url: string) {
+        console.error(friends);
+        return this.afs.collection(STATUS_COLLECTION,
+            ref => ref.where('currentUrl', '==', url))
+            // below not working, do friend filtering inside
+            // .where(firebase.firestore.FieldPath.documentId(), 'not-in', friends))
+        .snapshotChanges()
+        .pipe(
+            map(actions => {
+                return actions.map(a => {
+                    const status: any = a.payload.doc.data();
+                    if (uid !== a.payload.doc.id) {
+                        return {
+                            uid: a.payload.doc.id,
+                            isFriend: friends.includes(a.payload.doc.id),
+                            ...status
+                        };
+                    }
+                });
+            })
+        )
+    }
 }
