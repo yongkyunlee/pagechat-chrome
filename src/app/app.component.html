@@ -68,7 +68,44 @@
                 Sign Out
             </button>
         </div>
+
+
+        <!-- TODO replace this with loop of active users -->
+        <div *ngIf='!_chatService.inchat'>
+            <br>
+            <button (click)='updateRoom("JAILlJfkA0N1zirmemAXrEG4Hex1")'>
+                    Inertial Chowder (click to talk)
+            </button>
+            <br>
+            <button (click)='updateRoom("aqcEVGBVIuhz1XFrVPNvnJ6HAOJ3")'>
+                    Bechtel 214 (click to talk)
+            </button>
+            <br>
+            <br>
+        </div>
+
+
+        <!-- show open chat button if chat window is closed, and logged in -->
+        <button (click)='closeChat()'
+                *ngIf='_chatService.inchat && (authService.afAuth.user | async)'>
+            Close Chat
+        </button>
+        
+        <!-- show open chat button if chat window is open, and logged in -->
+        <button (click)='openChat()'
+        *ngIf='!_chatService.inchat && (authService.afAuth.user | async)'>
+            Open Last Chat
+        </button>
+        
+        <!-- use inchat to close the window if user selects to close -->
+        <app-chat *ngIf='_chatService.inchat && authService.afAuth.user | async'></app-chat>
+
     </div>
+    
+    <!-- use above login method instead -->
+    <!-- <app-login></app-login> -->
+
+    
 </div>
 
 <!-- <router-outlet></router-outlet> -->
