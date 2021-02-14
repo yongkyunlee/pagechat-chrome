@@ -29,7 +29,7 @@ export class FirebaseService {
                 });
     }
 
-    getFirends(uid) {
+    getFriends(uid) {
         return this.afs.collection(FRIENDS_COLLECTION).doc(uid).collection(FRIENDS_COLLECTION)
                 .snapshotChanges()
                 .pipe(
@@ -43,13 +43,29 @@ export class FirebaseService {
                 )
     }
 
-    getOnlineFriends() {
-        
+    getOnlineUsers(uid: string, friends: String[]) {
+        return this.afs.collection(STATUS_COLLECTION,
+                ref => ref.where('state', '==', 'online'))
+            .snapshotChanges()
+            .pipe(
+                map(actions => {
+                    return actions.map(a => {
+                        const status: any = a.payload.doc.data();
+                        if (uid !== a.payload.doc.id) {
+                            return {
+                                uid: a.payload.doc.id,
+                                last_changed: status.last_changed,
+                                currentTitle: status.currentTitle,
+                                currentUrl: status.currentUrl,
+                                timestamp: status.timestamp,
+                                isFriend: friends.includes(a.payload.doc.id)
+                            };
+                        }
+                    });
+                })
+            )
     }
 
-    getOnlineUsers() {
-
-    }
 
 
 
