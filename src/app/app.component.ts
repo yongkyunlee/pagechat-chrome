@@ -8,6 +8,7 @@ import { ChatService } from "src/app/services/chat.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
     public url: string;
     public arr = [];
@@ -23,24 +24,11 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.url = 'aa';
-        
-        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-            this.zone.run(() => {
-                this.url = tabs[0].url;
-            });
-
-            this._chatService.loadMessage().subscribe(() => {
-                setTimeout(() => {
-                  this.element.scrollTop = this.element.scrollHeight;
-                }, 20);
-              });
-        })
-
         this.authService.afAuth.user.subscribe(data => {
             this.authLoaded = true;
         });
     }
-    
+
     sendMessage() {
         if (this.message.length === 0) {
             return;

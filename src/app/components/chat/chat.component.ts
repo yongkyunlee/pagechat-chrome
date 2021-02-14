@@ -13,7 +13,7 @@ export class ChatComponent implements OnInit {
   constructor(public _chatService: ChatService) {
     this._chatService.loadMessage().subscribe(() => {
       setTimeout(() => {
-        this.element.scrollTop = this.element.scrollHeight;
+        // this.element.scrollTop = this.element.scrollHeight;
       }, 20);
     });
   }

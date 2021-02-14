@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import {
   AngularFirestore,
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from '@angular/fire/auth';
-// import { auth } from "firebase/app";
 import { Message } from "../interfaces/message.interface";
 import { map } from "rxjs/operators";
 
@@ -20,17 +18,17 @@ export class ChatService {
   public chats: Message[] = [];
 
   constructor(
-    private _router: Router,
     private _angularFirestore: AngularFirestore,
     public _angularFireAuth: AngularFireAuth
   ) {
     this._angularFireAuth.authState.subscribe(user => {
       if (!user) {
         this.user = {};
-        this._router.navigate(["/"]);
+        // if user logged out:        
+        // this._router.navigate(["/"]);
         return;
       }
-      this._router.navigate(["/chat"]);
+      // this._router.navigate(["/"]);
       this.user.name = user.displayName;
       this.user.uid = user.uid;
       this.user.photo = user.photoURL;
