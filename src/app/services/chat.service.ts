@@ -11,6 +11,7 @@ import firebase from 'firebase/app';
 
 import { CHATS_COLLECTION } from '../constants';
 
+
 @Injectable({
   providedIn: "root"
 })
@@ -24,6 +25,7 @@ export class ChatService {
   public inchat: boolean;
   // uid of the person currently talking to
   public friend_uid: string;
+  public unreads: Message[] = [];
 
   constructor(
     private _angularFirestore: AngularFirestore,
@@ -75,13 +77,19 @@ export class ChatService {
   loadMessage() {
     this.itemsCollection = this._angularFirestore.collection<Message>(
       CHATS_COLLECTION,
-      ref => ref.where("roomId", "==", this.roomId).orderBy("date", "desc").limit(10)
+      ref => ref.where("roomId", "==", this.roomId).orderBy("date", "desc").limit(Math.max(10+this.unreads.length))
     );
     return this.itemsCollection.valueChanges().pipe(
       map((messages: Message[]) => {
         this.chats = [];
         for (let message of messages) {
           this.chats.unshift(message);
+          // if the message we're displaying is to current user (not sent from current user)
+          // then want to update the read status
+          if (message.to_uid == this.user.uid) {
+            this._angularFirestore.collection<Message>(CHATS_COLLECTION).doc(message.from_uid + message.date)
+            .update({read: true});
+          }
         }
         return this.chats;
       })
@@ -95,29 +103,32 @@ export class ChatService {
       date: firebase.firestore.Timestamp.now().toMillis(),
       from_uid: this.user.uid,
       to_uid: this.friend_uid,
-      roomId: this.roomId
+      roomId: this.roomId,
+      read: false
     };
-    return this.itemsCollection.add(message);
+    return this.itemsCollection.doc(message.from_uid + message.date).set(message);
   }
 
-  // TODO for getting unread messages
-  // getUnreads() {
-  //   return this._angularFirestore.collection(CHATS_COLLECTION,
-  //       ref => ref.where('to_uid', '==', this.user.uid))
-  //   .snapshotChanges()
-  //   .pipe(
-  //     map(actions => {
-  //         return actions.map(a => {
-  //             const message: any = a.payload.doc.data();
-  //             if (this.user.uid !== a.payload.doc.id) {
-  //                 return {
-  //                     uid: a.payload.doc.id,
-  //                     ...message
-  //                 };
-  //             }
-  //         });
-  //     })
-  //   )
-  // }
+  getUnreads() {
+    return this._angularFirestore.collection<Message>(CHATS_COLLECTION,
+        ref => ref.where('to_uid', '==', this.user.uid).where('read', '==', false))
+    .snapshotChanges()
+    .pipe(
+      map(actions => {
+          return actions.map(a => {
+              // const message: any = a.payload.doc.data();
+              const data = a.payload.doc.data() as Message;
+              const id = a.payload.doc.id;
+              this.unreads= [];
+          
+              this.unreads.unshift(data);
+            
+              return {id,
+                  ...data
+              };
+          });
+      })
+    )
+  }
 
 }

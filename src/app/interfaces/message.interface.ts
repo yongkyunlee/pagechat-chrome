@@ -6,5 +6,6 @@ export interface Message {
     message: string;
     date?: number;
     roomId: string;
+    read: boolean;
   }
   

@@ -82,6 +82,32 @@ firebase.auth().onAuthStateChanged(user => {
                 });
             });
         });
+        
+        // for counting # of unread messages and setting a badge
+        firebase.firestore().collection('chats').where('to_uid', '==', user.uid).where('read', '==', false)
+            .onSnapshot((querySnapshot) => {
+                var senders = [];
+                var badgeText = ''
+                querySnapshot.forEach((doc) => {
+                    senders.push(doc.data())
+                })
+                
+                chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+                
+                if (senders.length == 0) {
+                    badgeText = '';
+                }
+                else if (senders.length <= 10) {
+                    badgeText = ''+senders.length;
+                }
+                else {
+                    badgeText = '10+';
+                }
+                chrome.browserAction.setBadgeText({text: badgeText});
+            })
+        
+
+
     }
     else {
         console.log(userUid + " signed out");
@@ -90,4 +116,3 @@ firebase.auth().onAuthStateChanged(user => {
         userUid = null;
     }
 });
-
