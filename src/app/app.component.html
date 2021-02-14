@@ -79,8 +79,8 @@
                             <div class='user-header-div'>
                                 <div>
                                     <span class='green-circle-span'>🟢</span>
-                                    <span class='user-email-span'>
-                                        Anonymous User
+                                    <span class='user-email-span' [ngStyle]="{'color': (hasSentMsg(user.uid)) ? '#005c66' : '#000000'}">
+                                        Anonymous User<b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
                                     </span>
                                 </div>
                                 
