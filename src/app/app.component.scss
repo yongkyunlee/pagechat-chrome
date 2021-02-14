@@ -211,3 +211,13 @@
 .google-auth-button:hover {
     cursor: pointer;
 }
+
+.chat-button-group-div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.chat-button {
+    font-size: 0.9rem;
+}

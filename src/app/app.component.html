@@ -119,16 +119,18 @@
         <!-- 2 of 2 views: chatting -->
         <div *ngIf='chatService.inchat'>
             <div *ngIf='(authService.afAuth.user | async)'>
-                <!-- basically switches between the views -->
-                <button (click)='closeChat()'>
-                    Close Chat
-                </button>
-                
-                <button (click)='authService.signOut()'>
-                    Sign Out
-                </button>
-
                 <app-chat></app-chat>
+
+                <!-- basically switches between the views -->
+                <div class='chat-button-group-div'>
+                    <button (click)='closeChat()' class='aux-button'>
+                        Close Chat
+                    </button>
+                    
+                    <button (click)='authService.signOut()' class='aux-button'>
+                        Sign Out
+                    </button>
+                </div>
             </div>
         </div>
     </div>
