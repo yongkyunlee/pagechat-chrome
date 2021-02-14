@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
                 this.chatService.getUnreads(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
                     this.unreads = data.map(function(a) {return a.from_uid;});
                     // this.unreads = data.filter(item => !!item);
+                    // this.unreads = data;
                     this.chatService.unreads = this.unreads
                 })
             });

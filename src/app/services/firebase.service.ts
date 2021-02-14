@@ -53,7 +53,7 @@ export class FirebaseService {
                             return {
                                 uid: a.payload.doc.id,
                                 isFriend: friends.includes(a.payload.doc.id),
-                                isUnread: unreads.some((sender) => sender == uid),
+                                isUnread: unreads.includes(a.payload.doc.id),
                                 ...status
                             };
                         }
@@ -76,7 +76,7 @@ export class FirebaseService {
                         return {
                             uid: a.payload.doc.id,
                             isFriend: friends.includes(a.payload.doc.id),
-                            isUnread: unreads.includes(''+a.payload.doc.id),
+                            isUnread: unreads.includes(a.payload.doc.id),
                             ...status
                         };
                     }

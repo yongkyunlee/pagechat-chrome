@@ -58,7 +58,7 @@
                                     <span class='green-circle-span'>🟢</span>
                                     <span class='friend-email-span'>
                                         {{ user.email ? user.email : user.uid }}
-                                        <b style='color:red' *ngIf='user.isUnread'>*</b>
+                                        <b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
                                     </span>
                                 </div>
                                 <button class='chat-button' (click)='updateRoom(user.uid)'>
@@ -81,7 +81,7 @@
                                 <div>
                                     <span class='green-circle-span'>🟢</span>
                                     <span class='user-email-span'>
-                                        Anonymous User<b style='color:red' *ngIf='user.isUnread'>*</b>
+                                        Anonymous User<b style='color:red' *ngIf='hasSentMsg(user.uid)'>*</b>
                                     </span>
                                 </div>
                                 

@@ -118,7 +118,7 @@ export class ChatService {
                     const data = a.payload.doc.data();// as Message;
                     const id = a.payload.doc.id;                    
                     return {
-                        uid: id,
+                        uid: a.payload.doc.id,
                         hasUnread : friends.includes(a.payload.doc.id),
                         ...data
                     };

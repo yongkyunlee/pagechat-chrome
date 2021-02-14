@@ -259,10 +259,11 @@ function AppComponent_div_4_div_3_div_1_div_4_div_1_Template(rf, ctx) { if (rf &
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const user_r14 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]().$implicit;
+    const ctx_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](4);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](6);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", user_r14.email ? user_r14.email : user_r14.uid, " ");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", user_r14.isUnread);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx_r15.hasSentMsg(user_r14.uid));
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](5);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("href", user_r14.currentUrl, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsanitizeUrl"]);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
@@ -305,8 +306,9 @@ function AppComponent_div_4_div_3_div_1_div_8_div_1_Template(rf, ctx) { if (rf &
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const user_r21 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]().$implicit;
+    const ctx_r22 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](4);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](7);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", user_r21.isUnread);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx_r22.hasSentMsg(user_r21.uid));
 } }
 function AppComponent_div_4_div_3_div_1_div_8_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div");
@@ -472,6 +474,7 @@ class AppComponent {
                 this.chatService.getUnreads(this.uid, this.friends.map(x => x.uid)).subscribe(data => {
                     this.unreads = data.map(function (a) { return a.from_uid; });
                     // this.unreads = data.filter(item => !!item);
+                    // this.unreads = data;
                     this.chatService.unreads = this.unreads;
                 });
             });
@@ -641,7 +644,7 @@ class FirebaseService {
             return actions.map(a => {
                 const status = a.payload.doc.data();
                 if (uid !== a.payload.doc.id) {
-                    return Object.assign({ uid: a.payload.doc.id, isFriend: friends.includes(a.payload.doc.id), isUnread: unreads.some((sender) => sender == uid) }, status);
+                    return Object.assign({ uid: a.payload.doc.id, isFriend: friends.includes(a.payload.doc.id), isUnread: unreads.includes(a.payload.doc.id) }, status);
                 }
             });
         }));
@@ -655,7 +658,7 @@ class FirebaseService {
             return actions.map(a => {
                 const status = a.payload.doc.data();
                 if (uid !== a.payload.doc.id) {
-                    return Object.assign({ uid: a.payload.doc.id, isFriend: friends.includes(a.payload.doc.id), isUnread: unreads.includes('' + a.payload.doc.id) }, status);
+                    return Object.assign({ uid: a.payload.doc.id, isFriend: friends.includes(a.payload.doc.id), isUnread: unreads.includes(a.payload.doc.id) }, status);
                 }
             });
         }));
@@ -895,7 +898,7 @@ class ChatService {
             return actions.map(a => {
                 const data = a.payload.doc.data(); // as Message;
                 const id = a.payload.doc.id;
-                return Object.assign({ uid: id, hasUnread: friends.includes(a.payload.doc.id) }, data);
+                return Object.assign({ uid: a.payload.doc.id, hasUnread: friends.includes(a.payload.doc.id) }, data);
             });
         }));
     }
